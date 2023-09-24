@@ -6,8 +6,8 @@ on:
     - deploy
 
 env:
-  SolutionFolder: ./sharepoint-list-filters
-  SolutionPackagePath: sharepoint-list-filters/sharepoint/solution/list-filter.sppkg
+  SolutionFolder: ../
+  SolutionPackagePath: ../sharepoint/solution/list-filter.sppkg
 
 jobs:
   buildAndDeploy:
