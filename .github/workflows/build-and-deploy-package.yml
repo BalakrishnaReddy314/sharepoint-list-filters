@@ -6,12 +6,12 @@ on:
     - deploy
 
 env:
-  SolutionFolder: ../
-  SolutionPackagePath: ../sharepoint/solution/list-filter.sppkg
+  SolutionFolder: ../../
+  SolutionPackagePath: ../../sharepoint/solution/list-filter.sppkg
 
 jobs:
   buildAndDeploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     
     steps:
     - name: Checkout code
