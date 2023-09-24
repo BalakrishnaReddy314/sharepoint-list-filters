@@ -1,0 +1,24 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+.listFilter {
+  width: 100%;
+  .container {
+    width: 100%;
+    display: flex;
+    .listContainer {
+      height: 70vh;
+      width: 18vw;
+      overflow: auto;
+    }
+  }
+}
+
+:global {
+  #sp-appBar {
+    display: none !important;
+  }
+
+  #spCommandBar {
+    display: none !important;
+  }
+}
