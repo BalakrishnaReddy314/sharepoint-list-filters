@@ -1,12 +1,12 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-// import { useSPContext } from "../GlobalSPContext";
 import styles from "../ListFilter.module.scss";
 import { IListInfo } from "@pnp/sp/lists";
 import SPServices from "../../../../services/SPServices";
 import QueryCommandBar from "../commandbar/QueryCommandBar";
 import { ConstrainMode, DetailsList, DetailsListLayoutMode, IDetailsListStyles, SelectionMode, Selection } from "@fluentui/react/lib/DetailsList";
 import { mergeStyleSets } from "@fluentui/react";
+import QueryEditor from "../queryEditor/QueryEditor";
 
 const gridStyles: Partial<IDetailsListStyles> = {
     root: {
@@ -43,7 +43,6 @@ const classNames = mergeStyleSets({
 function Container(): JSX.Element {
 
     const Services = new SPServices();
-
     const [lists, setLists] = useState<IListInfo[]>([]);
     const [selectedItem, setSelectedItem] = useState<{title: string, id: string}>(null);
 
@@ -53,15 +52,28 @@ function Container(): JSX.Element {
         }).catch((error) => console.log(error));
     }, []);
 
-    const selection = new Selection({onSelectionChanged: () => {
-        console.log(selection.getSelection());
-        const selectedItems = selection.getSelection() as IListInfo[];
-        setSelectedItem({title: selectedItems[0].Title, id: selectedItems[0].Id});
-    }});
+    useEffect(() => {
+        if(selectedItem) {
+            Services.getListFields(selectedItem.title).then((fields) => {
+                console.log(fields);
+            }).catch((error) => console.error(error.message));
+        }
+    }, [selectedItem]);
+
+    const selection = new Selection({
+        onSelectionChanged: () => {
+            const selectedItems = selection.getSelection() as IListInfo[];
+            if(selectedItems.length > 0) {
+                setSelectedItem({title: selectedItems[0].Title, id: selectedItems[0].Id});
+            } else {
+                setSelectedItem(null);
+            }
+        }
+    });
 
     return (
         <>
-            <QueryCommandBar />
+            <QueryCommandBar  disableAddNew={!selectedItem} />
             <div className={styles.container}>
                 <div className={styles.listContainer}>
                     {
@@ -76,12 +88,13 @@ function Container(): JSX.Element {
                                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                 selectionZoneProps={{className: classNames.selectionZone} as any}
                                 selection={selection}
+                                selectionPreservedOnEmptyClick
                             />
                         )
                     }
                 </div>
                 <div>
-                    {selectedItem && selectedItem.title}
+                    <QueryEditor selectedList={selectedItem} />
                 </div>
             </div>
         </>

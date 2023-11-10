@@ -1,13 +1,18 @@
 import * as React from "react";
 import { CommandBar, ICommandBarItemProps } from "@fluentui/react/lib/CommandBar";
 
-function QueryCommandBar(): JSX.Element {
+interface IQueryCommandBarProps {
+    disableAddNew: boolean;
+}
+
+function QueryCommandBar({ disableAddNew }: IQueryCommandBarProps): JSX.Element {
 
     const commandBarItems: ICommandBarItemProps[]  = [
         {
             key: "newQuery",
             text: "New Query",
-            iconProps: { iconName: "Add" }
+            iconProps: { iconName: "Add" },
+            disabled: disableAddNew
         },
         {
             key: "executeQuery",
